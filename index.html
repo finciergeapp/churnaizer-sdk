@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Churnaizer SDK Demo</title>
+  <title>Churnaizer SDK Landing Page</title>
+  <script src="./churnaizer-sdk.js"></script>
 </head>
 <body>
-    <h1>Churnaizer SDK Demo</h1>
-    <p>Open your browser's console to see the Churnaizer tracking output.</p>
+  <h1>Welcome to Churnaizer SDK</h1>
+  <p>This is an optional landing page for the Churnaizer SDK. You can test the SDK using the <a href="test.html">test page</a>.</p>
 
-    <script src="https://churnaizer-sdk.netlify.app/churnaizer-sdk.js"></script>
-    <script>
-        Churnaizer.track({
-            user_id: "user_123",
-            days_since_signup: 90,
-            monthly_revenue: 99.99,
-            subscription_plan: "Pro",
-            number_of_logins_last30days: 25,
-            active_features_used: 8,
-            support_tickets_opened: 1,
-            last_payment_status: "Success",
-            email_opens_last30days: 15,
-            last_login_days_ago: 1,
-            billing_issue_count: 0
-        }, "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca");
-    </script>
+  <h2>Example Usage:</h2>
+  <pre>
+    <code>
+&lt;script src="https://churnaizer-sdk.netlify.app/churnaizer-sdk.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  Churnaizer.track({
+    user_id: "user_001",
+    days_since_signup: 45,
+    monthly_revenue: 29.99,
+    subscription_plan: "Free Trial",
+    number_of_logins_last30days: 3,
+    active_features_used: 2,
+    support_tickets_opened: 0,
+    last_payment_status: "Failed",
+    email_opens_last30days: 1,
+    last_login_days_ago: 6,
+    billing_issue_count: 2
+  }, "YOUR_API_KEY_HERE");
+&lt;/script&gt;
+    </code>
+  </pre>
 </body>
 </html>

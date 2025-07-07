@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Churnaizer SDK Test</title>
+  <title>Testing Churnaizer SDK</title>
+  <script src="./churnaizer-sdk.js"></script>
 </head>
 <body>
-  <h1>Testing Churnaizer SDK</h1>
+  <h2>Test Churnaizer SDK</h2>
+  <button onclick="testTrack()">Run Test</button>
 
-  <script src="https://churnaizer-sdk.netlify.app/churnaizer-sdk.js"></script>
   <script>
-    Churnaizer.track({
-      user_id: "user_123",
-      days_since_signup: 90,
-      monthly_revenue: 99.99,
-      subscription_plan: "Pro",
-      number_of_logins_last30days: 25,
-      active_features_used: 8,
-      support_tickets_opened: 1,
-      last_payment_status: "Success",
-      email_opens_last30days: 15,
-      last_login_days_ago: 1,
-      billing_issue_count: 0
-    }, "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca");
+    function testTrack() {
+      const testUser = {
+        user_id: "user_test123",
+        days_since_signup: 60,
+        monthly_revenue: 59.99,
+        subscription_plan: "Pro",
+        number_of_logins_last30days: 15,
+        active_features_used: 5,
+        support_tickets_opened: 0,
+        last_payment_status: "Success",
+        email_opens_last30days: 10,
+        last_login_days_ago: 2,
+        billing_issue_count: 0
+      };
+
+      const apiKey = "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca";
+
+      Churnaizer.track(testUser, apiKey);
+    }
   </script>
 </body>
 </html>
