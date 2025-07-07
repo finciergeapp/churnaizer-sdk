@@ -1,6 +1,5 @@
-// ✅ Churnaizer SDK v1.1 - Secure API Integrated
 window.Churnaizer = {
-  track: function(userData, apiKey) {
+  track: function(userData, apiKey, callback) {
     fetch("https://ai-model-rumc.onrender.com/api/v1/predict", {
       method: "POST",
       headers: {
@@ -10,17 +9,18 @@ window.Churnaizer = {
       body: JSON.stringify(userData)
     })
     .then(response => {
-      if (!response.ok) {
-        throw new Error("HTTP " + response.status);
-      }
+      if (!response.ok) throw new Error("HTTP " + response.status);
       return response.json();
     })
     .then(data => {
       console.log("✅ Churn Score:", data.churn_score);
       console.log("📌 Reason:", data.churn_reason);
+      if (callback) callback(data);
     })
     .catch(error => {
       console.error("❌ Churnaizer SDK tracking failed:", error);
+      document.getElementById("result").innerText =
+        "❌ Error: " + error.message;
     });
   }
 };

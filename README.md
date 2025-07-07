@@ -14,13 +14,13 @@ churnaizer-sdk/
 
 ## `churnaizer-sdk.js`
 
-This file contains the core logic of the Churnaizer SDK. It defines a global `Churnaizer` object with a `track` function that sends user data to the churn prediction model.
+This file contains the core logic of the Churnaizer SDK. It defines a global `Churnaizer` object with a `track` function that sends user data to the churn prediction model. It now supports a `callback` function for handling responses and displaying results on the webpage, as well as improved error handling.
 
 **API Endpoint:** `https://ai-model-rumc.onrender.com/api/v1/predict`
 
 ## `test.html`
 
-This file is a simple HTML page for testing the SDK locally or after deployment. It includes `churnaizer-sdk.js` and provides a button to trigger a test `Churnaizer.track` call with example user data.
+This file is a simple HTML page for testing the SDK locally or after deployment. It includes `churnaizer-sdk.js` and provides a button to trigger a test `Churnaizer.track` call with example user data. The results (churn score and reason) are now displayed directly on the page, and errors are handled and shown.
 
 ## `index.html` (Optional)
 
@@ -45,13 +45,18 @@ To integrate the Churnaizer SDK into your website or application, simply add the
     email_opens_last30days: 1,
     last_login_days_ago: 6,
     billing_issue_count: 2
-  }, "YOUR_API_KEY_HERE");
+  }, "YOUR_API_KEY_HERE", function(result) {
+    // Handle the result here, e.g., display on UI
+    console.log("Churn Score:", result.churn_score);
+    console.log("Reason:", result.churn_reason);
+  });
 </script>
 ```
 
 **Important:**
 - Replace `"YOUR_API_KEY_HERE"` with your actual API key provided by Churnaizer.
 - Adjust the `user_id` and other `userData` fields to reflect the actual user information you want to send for churn prediction.
+- The `callback` function is optional but recommended for handling the prediction results.
 
 ## Deployment on Netlify
 

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Churnaizer SDK Test</title>
-  <script src="./churnaizer-sdk.js"></script>
+  <title>Testing Churnaizer SDK</title>
 </head>
 <body>
-  <h2>🧪 Testing Churnaizer SDK</h2>
+  <h1>✅ Churnaizer SDK Test</h1>
+
   <button onclick="testChurn()">Run Churn Test</button>
 
+  <h3 id="result">🔍 Waiting for result...</h3>
+
+  <script src="churnaizer-sdk.js"></script>
   <script>
     function testChurn() {
       const testUser = {
@@ -24,8 +27,13 @@
         billing_issue_count: 0
       };
 
-      const apiKey = "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca";
-      Churnaizer.track(testUser, apiKey);
+      const apiKey = "your_api_key_here"; // Replace with your actual key
+
+      Churnaizer.track(testUser, apiKey, function(result) {
+        document.getElementById("result").innerText =
+          "✅ Churn Score: " + result.churn_score +
+          "\n📌 Reason: " + result.churn_reason;
+      });
     }
   </script>
 </body>
