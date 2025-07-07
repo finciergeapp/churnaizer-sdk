@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churnaizer SDK Demo</title>
+</head>
+<body>
+    <h1>Churnaizer SDK Demo</h1>
+    <p>Open your browser's console to see the Churnaizer tracking output.</p>
+
+    <script src="churnaizer-sdk.js"></script>
+    <script>
+        // Replace with your actual user info and API Key
+        const userInfo = {
+            userId: "user123",
+            email: "user@example.com",
+            plan: "premium",
+            // Add any other relevant user data here
+        };
+        const apiKey = "YOUR_API_KEY"; // !!! IMPORTANT: Replace with your actual API Key !!!
+
+        if (window.Churnaizer && typeof window.Churnaizer.track === 'function') {
+            window.Churnaizer.track(userInfo, apiKey);
+        } else {
+            console.error("Churnaizer SDK not loaded correctly.");
+        }
+    </script>
+</body>
+</html>
