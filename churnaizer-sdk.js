@@ -13,9 +13,10 @@ window.Churnaizer = {
       return response.json();
     })
     .then(data => {
-      console.log("✅ Churn Score:", data.churn_score);
-      console.log("📌 Reason:", data.churn_reason);
-      if (callback) callback(data);
+      const churn_score = data.churn_score || (data.result && data.result.churn_score);
+      const churn_reason = data.churn_reason || (data.result && data.result.churn_reason);
+
+      if (callback) callback({ churn_score, churn_reason });
     })
     .catch(error => {
       console.error("❌ Churnaizer SDK tracking failed:", error);
