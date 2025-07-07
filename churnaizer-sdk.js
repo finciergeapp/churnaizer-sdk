@@ -1,6 +1,6 @@
 // Churnaizer Tracking SDK v1.0
 (function () {
-  const CHURNAIZER_API = "https://churnaizer.com/api/track"; // Change this if needed
+  const CHURNAIZER_API = "https://ai-model-rumc.onrender.com/track"; // Change this if needed
 
   window.Churnaizer = {
     track: function (userInfo, apiKey) {
