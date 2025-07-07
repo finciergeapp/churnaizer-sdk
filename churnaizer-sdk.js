@@ -1,4 +1,4 @@
-// Churnaizer SDK v1.0
+// ✅ Churnaizer SDK v1.1 - Secure API Integrated
 window.Churnaizer = {
   track: function(userData, apiKey) {
     fetch("https://ai-model-rumc.onrender.com/api/v1/predict", {
@@ -20,7 +20,7 @@ window.Churnaizer = {
       console.log("📌 Reason:", data.churn_reason);
     })
     .catch(error => {
-      console.error("Churnaizer SDK tracking failed:", error);
+      console.error("❌ Churnaizer SDK tracking failed:", error);
     });
   }
 };

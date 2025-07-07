@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Testing Churnaizer SDK</title>
+  <title>Churnaizer SDK Test</title>
   <script src="./churnaizer-sdk.js"></script>
 </head>
 <body>
-  <h2>Test Churnaizer SDK</h2>
-  <button onclick="testTrack()">Run Test</button>
+  <h2>🧪 Testing Churnaizer SDK</h2>
+  <button onclick="testChurn()">Run Churn Test</button>
 
   <script>
-    function testTrack() {
+    function testChurn() {
       const testUser = {
-        user_id: "user_test123",
+        user_id: "user_test_001",
         days_since_signup: 60,
         monthly_revenue: 59.99,
         subscription_plan: "Pro",
-        number_of_logins_last30days: 15,
-        active_features_used: 5,
+        number_of_logins_last30days: 18,
+        active_features_used: 4,
         support_tickets_opened: 0,
         last_payment_status: "Success",
-        email_opens_last30days: 10,
-        last_login_days_ago: 2,
+        email_opens_last30days: 12,
+        last_login_days_ago: 1,
         billing_issue_count: 0
       };
 
       const apiKey = "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca";
-
       Churnaizer.track(testUser, apiKey);
     }
   </script>
