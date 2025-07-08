@@ -32,8 +32,10 @@
 
       Churnaizer.track(testUser, apiKey, function(result) {
         document.getElementById("result").innerText =
-          "✅ Churn Score: " + (result.churn_score !== undefined && result.churn_score !== null ? result.churn_score : "N/A") +
-          "\n📌 Reason: " + (result.churn_reason || "N/A");
+          "✅ Churn Score: " + result.churn_score.toFixed(4) + "\n"  +
+          "📌 Reason: " + result.churn_reason + "\n"  +
+          "💡 Insight: " + result.insight + "\n"  +
+          "🧠 Understanding Score: " + result.understanding ;
       });
     }
   </script>
