@@ -1,43 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Testing Churnaizer SDK</title>
+  <title>Churnaizer Live SDK Test</title>
 </head>
 <body>
-  <h1>✅ Churnaizer SDK Test</h1>
+  <h1>🧪 Churnaizer SDK - Live Test</h1>
 
-  <button onclick="testChurn()">Run Churn Test</button>
+  <form id="userForm">
+    <input name="user_id" placeholder="User ID" required><br>
+    <input name="monthly_revenue" placeholder="Monthly Revenue" type="number" required><br>
+    <input name="subscription_plan" placeholder="Plan (e.g., Pro)" required><br>
+    <input name="number_of_logins_last30days" placeholder="Login Count (30 days)" type="number"><br>
+    <input name="days_since_signup" placeholder="Days since signup" type="number"><br>
+    <button type="submit">🔍 Run Prediction</button>
+  </form>
 
-  <h3 id="result">🔍 Waiting for result...</h3>
+  <h3 id="result">Waiting...</h3>
 
-  <script src="churnaizer-sdk.js"></script>
+  <script src="https://churnaizer.com/churnaizer-sdk.js"></script>
   <script>
-    function testChurn() {
-      const testUser = {
-        user_id: "user_test_001",
-        days_since_signup: 60,
-        monthly_revenue: 59.99,
-        subscription_plan: "Pro",
-        number_of_logins_last30days: 18,
-        active_features_used: 4,
+    document.getElementById("userForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const userData = {
+        user_id: form.user_id.value,
+        monthly_revenue: parseFloat(form.monthly_revenue.value),
+        subscription_plan: form.subscription_plan.value,
+        number_of_logins_last30days: parseInt(form.number_of_logins_last30days.value || 0),
+        days_since_signup: parseInt(form.days_since_signup.value || 0),
+        active_features_used: 4,  // You can add more dynamic fields
         support_tickets_opened: 0,
         last_payment_status: "Success",
-        email_opens_last30days: 12,
-        last_login_days_ago: 1,
+        email_opens_last30days: 10,
+        last_login_days_ago: 2,
         billing_issue_count: 0
       };
 
-      const apiKey = "cg_9f057cc9876e0a52658957f0275419e783dddfcbfd76ffefa4a5bc66aeac99ca";
- // Replace with your actual key
+      const apiKey = "YOUR_API_KEY_SHOULD_BE_HANDLED_FROM BACKEND"; // Do not expose in prod
 
-      Churnaizer.track(testUser, apiKey, function(result) {
+      Churnaizer.track(userData, apiKey, function(result, error) {
+        if (error) {
+          return document.getElementById("result").innerText = "❌ Error: " + error.message;
+        }
+
         document.getElementById("result").innerText =
-          "✅ Churn Score: " + result.churn_score.toFixed(4) + "\n"  +
-          "📌 Reason: " + result.churn_reason + "\n"  +
-          "💡 Insight: " + result.insight + "\n"  +
-          "🧠 Understanding Score: " + result.understanding ;
+          "✅ Churn Score: " + (result.churn_score * 100).toFixed(1) + "%" + "\n" +
+          "📌 Reason: " + result.churn_reason + "\n" +
+          "💡 Insight: " + result.insight;
       });
-    }
+    });
   </script>
 </body>
 </html>

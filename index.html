@@ -10,11 +10,13 @@
 
   <h2>Example Usage:</h2>
   <pre>
-    <code>
-&lt;script src="https://churnaizer-sdk.netlify.app/churnaizer-sdk.js"&gt;&lt;/script&gt;
-&lt;script&gt;
+    <!-- Churnaizer SDK v1.0.0 - Production Ready -->
+<script src="https://churnaizer.com/churnaizer-sdk.js"></script>
+<script>
   Churnaizer.track({
     user_id: "user_001",
+    customer_name: "John Doe",
+    customer_email: "john.doe@example.com",
     days_since_signup: 45,
     monthly_revenue: 29.99,
     subscription_plan: "Free Trial",
@@ -25,9 +27,12 @@
     email_opens_last30days: 1,
     last_login_days_ago: 6,
     billing_issue_count: 2
-  }, "YOUR_API_KEY_HERE");
-&lt;/script&gt;
-    </code>
+  }, "cg_ad05d59bfb61ae1c1d7a35372b8900c07d1895114c8ef5f10b97b7170e751759", function(result, error) {
+    if (error) return console.error("❌ Churn prediction failed:", error);
+    console.log("✅ Churn prediction:", result);
+    Churnaizer.showBadge('.user-profile', result);
+  });
+</script>
   </pre>
 </body>
 </html>
