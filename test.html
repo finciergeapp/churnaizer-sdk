@@ -12,6 +12,8 @@
     <input name="subscription_plan" placeholder="Plan (e.g., Pro)" required><br>
     <input name="number_of_logins_last30days" placeholder="Login Count (30 days)" type="number"><br>
     <input name="days_since_signup" placeholder="Days since signup" type="number"><br>
+    <input name="customer_email" placeholder="Email"><br>
+    <input name="customer_name" placeholder="Name"><br>
     <button type="submit">🔍 Run Prediction</button>
   </form>
 
@@ -28,6 +30,8 @@
         subscription_plan: form.subscription_plan.value,
         number_of_logins_last30days: parseInt(form.number_of_logins_last30days.value || 0),
         days_since_signup: parseInt(form.days_since_signup.value || 0),
+        customer_email: form.customer_email.value,
+        customer_name: form.customer_name.value,
         active_features_used: 4,  // You can add more dynamic fields
         support_tickets_opened: 0,
         last_payment_status: "Success",
