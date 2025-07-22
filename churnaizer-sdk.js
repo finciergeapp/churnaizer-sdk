@@ -21,7 +21,7 @@ window.Churnaizer = {
     const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds
 
     try {
-      const data = await retryFetch("https://ai-model-rumc.onrender.com/api/v1/predict", {
+      const data = await retryFetch("https://ai-model-rumc.onrender.com/predict", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
