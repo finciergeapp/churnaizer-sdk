@@ -1,43 +1,28 @@
 window.Churnaizer = {
-  track: async function(userData, apiKey, callback) {
+  track: function(userData, apiKey, callback) {
+    fetch("https://ai-model-rumc.onrender.com/api/v1/predict", { // Flask API endpoint
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": apiKey
+      },
+      body: JSON.stringify(userData)
+    })
+    .then(async response => {
+      const text = await response.text();
 
-    async function retryFetch(url, options, retries = 2) {
-      for (let i = 0; i <= retries; i++) {
-        try {
-          const response = await fetch(url, options);
-          if (!response.ok) throw new Error("HTTP " + response.status);
-          return await response.json();
-        } catch (e) {
-          if (i === retries) throw e;
-        }
+      // 🔐 If HTML is returned (like a 404), show a clean error
+      if (text.startsWith("<!DOCTYPE") || text.includes("<html")) {
+        throw new Error("Server returned HTML instead of JSON (check if API is online)");
       }
-    }
-    if (!userData || typeof userData !== "object" || !userData.user_id) {
-      console.error("❌ Churnaizer SDK: userData must include a valid user_id.");
-      if (callback) callback(null, new Error("userData must include a valid user_id."));
-      return;
-    }
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds
 
-    try {
-      const data = await retryFetch("https://ntbkydpgjaswmwruegyl.supabase.co/functions/v1/track", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": apiKey,
-          "X-SDK-Version": "1.0.0"
-        },
-        body: JSON.stringify(userData),
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
+      const data = JSON.parse(text);
       const churn_score = data.churn_probability;
       const churn_reason = data.reason;
       const insight = data.message;
       const understanding = data.understanding_score;
 
-      // ✅ Sync to Churnaizer backend to show in dashboard
+      // ✅ Send to Churnaizer backend for dashboard display
       fetch("https://churnaizer.com/api/sync", {
         method: "POST",
         headers: {
@@ -52,14 +37,14 @@ window.Churnaizer = {
         })
       });
 
-      // ✅ Callback for SDK integration
+      // ✅ Callback
       if (callback) {
         callback({ churn_score, churn_reason, insight, understanding });
       }
-    } catch (error) {
-      clearTimeout(timeout);
+    })
+    .catch(error => {
+      console.error("❌ Churnaizer SDK Error:", error);
       if (callback) callback(null, error);
-      console.error("❌ Churnaizer SDK tracking failed:", error);
-    };
+    });
   }
 };
