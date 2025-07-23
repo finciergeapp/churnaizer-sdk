@@ -1,56 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Churnaizer Live SDK Test</title>
+  <meta charset="UTF-8" />
+  <title>Churnaizer SDK - Live Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: #f9f9f9;
+    }
+    input, button {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    pre {
+      background: #000;
+      color: #0f0;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
-  <h1>🧪 Churnaizer SDK - Live Test</h1>
+  <h2>🔍 Churnaizer SDK - Live Prediction Test</h2>
+  <p>Test how the SDK tracks users and predicts churn using real AI:</p>
 
-  <form id="userForm">
-    <input name="user_id" placeholder="User ID" required><br>
-    <input name="monthly_revenue" placeholder="Monthly Revenue" type="number" required><br>
-    <input name="subscription_plan" placeholder="Plan (e.g., Pro)" required><br>
-    <input name="number_of_logins_last30days" placeholder="Login Count (30 days)" type="number"><br>
-    <input name="days_since_signup" placeholder="Days since signup" type="number"><br>
-    <input name="customer_email" placeholder="Email"><br>
-    <input name="customer_name" placeholder="Name"><br>
-    <button type="submit">🔍 Run Prediction</button>
-  </form>
+  <input id="user_id" placeholder="User ID" value="u123" />
+  <input id="plan" placeholder="User Plan" value="free trial" />
+  <input id="usage_score" type="number" placeholder="Usage Score (0-100)" value="45" />
+  <input id="support_tickets" type="number" placeholder="Support Tickets" value="2" />
+  <input id="email" type="email" placeholder="Email Address" value="founder@saas.com" />
+  
+  <button id="runPredictionBtn">🔍 Run Churn Prediction</button>
 
-  <h3 id="result">Waiting...</h3>
+  <pre id="predictionResult">Results will appear here...</pre>
 
-  <script src="https://churnaizer.com/churnaizer-sdk.js"></script>
+  <!-- Load SDK -->
+  <script src="churnaizer-sdk.js"></script>
+
   <script>
-    document.getElementById("userForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const form = e.target;
+    const CHURN_API_KEY = "churn_live_abc123xyz"; // ✅ use real key here
+
+    document.getElementById("runPredictionBtn").addEventListener("click", function () {
       const userData = {
-        user_id: form.user_id.value,
-        monthly_revenue: parseFloat(form.monthly_revenue.value),
-        subscription_plan: form.subscription_plan.value,
-        number_of_logins_last30days: parseInt(form.number_of_logins_last30days.value || 0),
-        days_since_signup: parseInt(form.days_since_signup.value || 0),
-        customer_email: form.customer_email.value,
-        customer_name: form.customer_name.value,
-        active_features_used: 4,  // You can add more dynamic fields
-        support_tickets_opened: 0,
-        last_payment_status: "Success",
-        email_opens_last30days: 10,
-        last_login_days_ago: 2,
-        billing_issue_count: 0
+        user_id: document.getElementById("user_id").value,
+        plan: document.getElementById("plan").value,
+        usage_score: parseFloat(document.getElementById("usage_score").value),
+        support_tickets: parseInt(document.getElementById("support_tickets").value),
+        email: document.getElementById("email").value
       };
 
-      const apiKey = "YOUR_API_KEY_SHOULD_BE_HANDLED_FROM BACKEND"; // Do not expose in prod
+      window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {
+        const output = document.getElementById("predictionResult");
 
-      Churnaizer.track(userData, apiKey, function(result, error) {
-        if (error) {
-          return document.getElementById("result").innerText = "❌ Error: " + error.message;
+        if (err) {
+          output.innerText = "❌ Error: " + err.message;
+        } else {
+          output.innerText = `
+✅ Churn Score: ${result.churn_score}
+📉 Reason: ${result.churn_reason}
+💡 Insight: ${result.insight}
+🧠 Confidence Score: ${result.understanding}
+          `;
         }
-
-        document.getElementById("result").innerText =
-          "✅ Churn Score: " + (result.churn_score * 100).toFixed(1) + "%" + "\n" +
-          "📌 Reason: " + result.churn_reason + "\n" +
-          "💡 Insight: " + result.insight;
       });
     });
   </script>
