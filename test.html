@@ -48,29 +48,67 @@
   <script>
     const CHURN_API_KEY = "cg_demo_api_key_for_testing_only"; // Replace with test API key from Supabase
 
-    document.getElementById("runPredictionBtn").addEventListener("click", function () {
-      const userData = {
-        user_id: document.getElementById("user_id").value,
-        plan: document.getElementById("plan").value,
-        usage_score: parseFloat(document.getElementById("usage_score").value),
-        support_tickets: parseInt(document.getElementById("support_tickets").value),
-        email: document.getElementById("email").value
+    function runManualTest() {
+      document.getElementById("runPredictionBtn").addEventListener("click", function () {
+        const userData = {
+          user_id: document.getElementById("user_id").value,
+          plan: document.getElementById("plan").value,
+          usage_score: parseFloat(document.getElementById("usage_score").value),
+          support_tickets: parseInt(document.getElementById("support_tickets").value),
+          email: document.getElementById("email").value
+        };
+
+        window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {
+          const output = document.getElementById("predictionResult");
+
+          if (err) {
+            output.innerText = "❌ Error: " + err.message;
+          } else {
+            output.innerText = `\n✅ Churn Score: ${result.churn_score}\n📉 Reason: ${result.churn_reason}\n💡 Insight: ${result.insight}\n🧠 Confidence Score: ${result.understanding}\n          `;
+          }
+        });
+      });
+    }
+
+    function autoRunTest() {
+      const mockUser = {
+        user_id: 'u_test',
+        email: 'test@example.com',
+        plan: 'Pro',
+        loginCount: 5,
+        dashboardViews: 3,
+        reportsGenerated: 1,
+        settingsAccessed: 1
       };
 
-      window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {
-        const output = document.getElementById("predictionResult");
+      if (window.Churnaizer) {
+        window.Churnaizer.track(
+          mockUser,
+          CHURN_API_KEY,
+          function (result, error) {
+            if (error) {
+              console.error('SDK Test Failed:', error);
+              window.parent.postMessage({ status: 'failed', error: error.message }, '*');
+            } else {
+              console.log('SDK Test Passed:', result);
+              window.parent.postMessage({ status: 'passed', result }, '*');
+            }
+          }
+        );
+      } else {
+        window.parent.postMessage({ status: 'failed', error: 'SDK not loaded' }, '*');
+      }
+    }
 
-        if (err) {
-          output.innerText = "❌ Error: " + err.message;
-        } else {
-          output.innerText = `
-✅ Churn Score: ${result.churn_score}
-📉 Reason: ${result.churn_reason}
-💡 Insight: ${result.insight}
-🧠 Confidence Score: ${result.understanding}
-          `;
-        }
-      });
+    window.addEventListener('DOMContentLoaded', function() {
+      if (window !== window.parent) {
+        // Running inside iframe → auto-test mode
+        autoRunTest();
+        document.body.innerHTML = '<h2>Running SDK Test in iframe... Check console.</h2>'; // Optionally hide form
+      } else {
+        // Normal use → show form
+        runManualTest();
+      }
     });
   </script>
 </body>
