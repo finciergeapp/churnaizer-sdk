@@ -72,27 +72,38 @@
 
     function autoRunTest() {
       const mockUser = {
-        user_id: 'u_test',
-        email: 'test@example.com',
-        plan: 'Pro',
-        loginCount: 5,
-        dashboardViews: 3,
-        reportsGenerated: 1,
-        settingsAccessed: 1
+        id: "user_high_risk_001",
+        email: "shaikhsadique730@gmail.com",
+        plan: "free",
+        loginCount: 1,
+        dashboardViews: 0,
+        reportsGenerated: 0,
+        settingsAccessed: 0
       };
 
       if (window.Churnaizer) {
         window.Churnaizer.track(
-          mockUser,
-          CHURN_API_KEY,
-          function (result, error) {
-            if (error) {
-              console.error('SDK Test Failed:', error);
-              window.parent.postMessage({ status: 'failed', error: error.message }, '*');
-            } else {
-              console.log('SDK Test Passed:', result);
-              window.parent.postMessage({ status: 'passed', result }, '*');
+          {
+            user_id: mockUser.id,
+            email: mockUser.email,
+            subscription_plan: mockUser.plan,
+            usage: mockUser.loginCount,
+            feature_usage: {
+              dashboard: mockUser.dashboardViews,
+              reports: mockUser.reportsGenerated,
+              settings: mockUser.settingsAccessed
             }
+          },
+          "cg_4a7ae37e08f0ac064f93b244487e19b8", // Your test API key
+          function (error, result) {
+            if (error) {
+              console.error("Churnaizer tracking failed:", error);
+              window.parent.postMessage({ error: error.message }, "*");
+              return;
+            }
+
+            console.log("Churnaizer test result:", result);
+            window.parent.postMessage(result, "*");
           }
         );
       } else {
