@@ -58,7 +58,7 @@
           email: document.getElementById("email").value
         };
 
-        window.Churnaizer.track(userData, cg_4a7ae37e08f0ac064f93b244487e19b8, function (result, err) {
+        window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {
           const output = document.getElementById("predictionResult");
 
           if (err) {
@@ -78,7 +78,16 @@
         loginCount: 1,
         dashboardViews: 0,
         reportsGenerated: 0,
-        settingsAccessed: 0
+        settingsAccessed: 0,
+        days_since_signup: 30,
+        monthly_revenue: 10.00,
+        number_of_logins_last30days: 1,
+        active_features_used: ['dashboard'],
+        support_tickets_opened: 0,
+        last_payment_status: 'paid',
+        email_opens_last30days: 0,
+        last_login_days_ago: 1,
+        billing_issue_count: 0
       };
 
       if (window.Churnaizer) {
@@ -87,15 +96,18 @@
             user_id: mockUser.id,
             email: mockUser.email,
             subscription_plan: mockUser.plan,
-            usage: mockUser.loginCount,
-            feature_usage: {
-              dashboard: mockUser.dashboardViews,
-              reports: mockUser.reportsGenerated,
-              settings: mockUser.settingsAccessed
-            }
+            days_since_signup: mockUser.days_since_signup,
+            monthly_revenue: mockUser.monthly_revenue,
+            number_of_logins_last30days: mockUser.number_of_logins_last30days,
+            active_features_used: mockUser.active_features_used,
+            support_tickets_opened: mockUser.support_tickets_opened,
+            last_payment_status: mockUser.last_payment_status,
+            email_opens_last30days: mockUser.email_opens_last30days,
+            last_login_days_ago: mockUser.last_login_days_ago,
+            billing_issue_count: mockUser.billing_issue_count
           },
           "cg_4a7ae37e08f0ac064f93b244487e19b8", // Your test API key
-          function (result, error) {
+          function (error, result) {
             if (error) {
               console.error("Churnaizer tracking failed:", error);
               window.parent.postMessage({ error: error.message }, "*");
