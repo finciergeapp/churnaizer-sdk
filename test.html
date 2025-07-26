@@ -58,7 +58,7 @@
           email: document.getElementById("email").value
         };
 
-        window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {
+        window.Churnaizer.track(userData, cg_4a7ae37e08f0ac064f93b244487e19b8, function (result, err) {
           const output = document.getElementById("predictionResult");
 
           if (err) {
@@ -95,7 +95,7 @@
             }
           },
           "cg_4a7ae37e08f0ac064f93b244487e19b8", // Your test API key
-          function (error, result) {
+          function (result, error) {
             if (error) {
               console.error("Churnaizer tracking failed:", error);
               window.parent.postMessage({ error: error.message }, "*");
