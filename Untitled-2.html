@@ -1,0 +1,13 @@
+<script src="https://cdn.churnaizer.com/churnaizer-sdk.js"></script>
+<script>
+  window.currentUser = {
+    id: "USER_ID_FROM_APP",
+    email: "EMAIL_FROM_APP",
+    plan: "Pro",
+    loginCount: 10,
+    dashboardViews: 5,
+    reportsGenerated: 2,
+    settingsAccessed: 1
+  };
+  window.Churnaizer.track(window.currentUser, "YOUR_API_KEY_HERE");
+</script>
