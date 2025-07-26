@@ -33,21 +33,41 @@ window.Churnaizer = {
        }
   
        const prediction = JSON.parse(text);
+
+       // Validate required fields from API response
+       const requiredFields = [
+         'churn_probability',
+         'reason',
+         'message',
+         'understanding_score',
+         'risk_level',
+         'shouldTriggerEmail',
+         'recommended_tone'
+       ];
+
+       const missingFields = requiredFields.filter(field => prediction[field] === undefined);
+       if (missingFields.length > 0) {
+         throw new Error(`API response missing required fields: ${missingFields.join(', ')}`);
+       }
+
        const {
          churn_probability,
          reason,
          message,
          understanding_score,
-         risk_level // ⬅️ Required for email logic
+         risk_level,
+         shouldTriggerEmail,
+         recommended_tone
        } = prediction;
-  
+
        const result = {
          churn_score: churn_probability,
          churn_reason: reason,
          insight: message,
          understanding: understanding_score,
          risk_level,
-         shouldTriggerEmail: risk_level === 'high' // ⬅️ Email logic hook
+         shouldTriggerEmail,
+         recommended_tone
        };
   
        // 🔁 Sync to dashboard
