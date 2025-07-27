@@ -110,12 +110,12 @@
           function (error, result) {
             if (error) {
               console.error("Churnaizer tracking failed:", error);
-              window.parent.postMessage({ error: error.message }, "*");
+              window.parent.postMessage({ success: false, error: error.message }, "*");
               return;
             }
 
             console.log("Churnaizer test result:", result);
-            window.parent.postMessage(result, "*");
+            window.parent.postMessage({ success: true, ...result }, "*");
           }
         );
       } else {
