@@ -22,7 +22,7 @@ window.Churnaizer = {
          headers: {
            "Content-Type": "application/json",
            "X-API-Key": apiKey,
-           "X-SDK-Version": this.version // Note: Origin header is not set manually as it's handled by browser and not present in original code, thus no removal is needed.
+
          },
          body: JSON.stringify(userData)
        });
