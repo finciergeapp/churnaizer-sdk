@@ -38,6 +38,13 @@
   <input id="usage_score" type="number" placeholder="Usage Score (0-100)" value="45" />
   <input id="support_tickets" type="number" placeholder="Support Tickets" value="2" />
   <input id="email" type="email" placeholder="Email Address" value="founder@saas.com" />
+  <input id="days_since_signup" type="number" placeholder="Days Since Signup" value="30" />
+  <input id="number_of_logins_last30days" type="number" placeholder="Logins Last 30 Days" value="10" />
+  <input id="active_features_used" placeholder="Active Features Used (comma-separated)" value="dashboard,reports" />
+  <input id="last_payment_status" placeholder="Last Payment Status" value="paid" />
+  <input id="email_opens_last30days" type="number" placeholder="Email Opens Last 30 Days" value="5" />
+  <input id="last_login_days_ago" type="number" placeholder="Last Login Days Ago" value="2" />
+  <input id="billing_issue_count" type="number" placeholder="Billing Issue Count" value="0" />
   
   <button id="runPredictionBtn">🔍 Run Churn Prediction</button>
 
@@ -55,7 +62,14 @@
           plan: document.getElementById("plan").value,
           usage_score: parseFloat(document.getElementById("usage_score").value),
           support_tickets: parseInt(document.getElementById("support_tickets").value),
-          email: document.getElementById("email").value
+          email: document.getElementById("email").value,
+          days_since_signup: parseInt(document.getElementById("days_since_signup").value),
+          number_of_logins_last30days: parseInt(document.getElementById("number_of_logins_last30days").value),
+          active_features_used: document.getElementById("active_features_used").value.split(',').map(s => s.trim()),
+          last_payment_status: document.getElementById("last_payment_status").value,
+          email_opens_last30days: parseInt(document.getElementById("email_opens_last30days").value),
+          last_login_days_ago: parseInt(document.getElementById("last_login_days_ago").value),
+          billing_issue_count: parseInt(document.getElementById("billing_issue_count").value)
         };
 
         window.Churnaizer.track(userData, CHURN_API_KEY, function (result, err) {

@@ -25,7 +25,7 @@ window.Churnaizer = {
           "x-sdk-version": window.Churnaizer.version,
           "x-trace-id": traceId
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify({ ...userData, api_key: apiKey })
       });
 
       const text = await predictRes.text();
@@ -82,7 +82,7 @@ window.Churnaizer = {
             "X-API-Key": apiKey,
             "x-trace-id": traceId
           },
-          body: JSON.stringify({ userData, prediction: result, trace_id: traceId })
+          body: JSON.stringify({ userData, prediction: result, trace_id: traceId, api_key: apiKey })
         });
         if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] Dashboard Sync Request Sent.`);
       } catch (error) {
@@ -106,7 +106,8 @@ window.Churnaizer = {
             churn_score: result.churn_score,
             churn_reason: result.churn_reason,
             risk_level: result.risk_level,
-            subscription_plan: userData.subscription_plan // Assuming this is part of userData
+            subscription_plan: userData.subscription_plan, // Assuming this is part of userData
+            api_key: apiKey
           })
         });
         if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] Email Trigger Request Sent.`);
@@ -160,7 +161,7 @@ window.Churnaizer = {
                   'X-API-Key': apiKey,
                   'x-trace-id': traceId
               },
-              body: JSON.stringify({ ...eventData, trace_id: traceId })
+              body: JSON.stringify({ ...eventData, trace_id: traceId, api_key: apiKey })
           });
           if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] SDK Event Request Sent.`);
 
