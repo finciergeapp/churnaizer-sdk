@@ -29,13 +29,46 @@ window.Churnaizer = {
       });
 
       const text = await predictRes.text();
-      if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] Prediction API Parsed Response:`, prediction);
       if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] Prediction API Raw Response:`, text);
       if (text.startsWith("<!DOCTYPE") || text.includes("<html")) {
         throw new Error("Invalid HTML response. API might be unreachable or URL incorrect.");
       }
 
       const prediction = JSON.parse(text);
+      if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] Prediction API Parsed Response:`, prediction);
+      
+      // Check for API error response format
+      if (prediction.status === 'ok' && prediction.failed > 0) {
+        // This is the specific error case mentioned in the user's report
+        if (prediction.results && prediction.results.length > 0) {
+          // Look for any result with error information
+          const failedResult = prediction.results.find(r => r.status === 'error' || r.error);
+          if (failedResult) {
+            throw new Error(failedResult.error || 'API processing failed');
+          }
+          
+          // Check each result for any error property at any level
+          for (const result of prediction.results) {
+            if (typeof result === 'object' && result !== null) {
+              // Check if the result itself has an error message
+              if (result.message) {
+                throw new Error(result.message);
+              }
+              
+              // Check if there's an error object inside the result
+              if (result.error) {
+                if (typeof result.error === 'string') {
+                  throw new Error(result.error);
+                } else if (typeof result.error === 'object' && result.error !== null && result.error.message) {
+                  throw new Error(result.error.message);
+                }
+              }
+            }
+          }
+        }
+        // If we have failed items but couldn't find a specific error message
+        throw new Error(`Processing failed: ${prediction.failed} of ${prediction.total} items failed`);
+      }
 
       // Validate required fields from API response
       const requiredFields = [

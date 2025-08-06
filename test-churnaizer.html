@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Churnaizer SDK - Test Page</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: #f9f9f9;
+    }
+    button {
+      display: block;
+      margin: 20px 0;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    pre {
+      background: #000;
+      color: #0f0;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔍 Churnaizer SDK - Test Page</h2>
+  <p>This page is specifically designed to test and debug the Churnaizer SDK.</p>
+  
+  <button id="testButton">Test Tracking</button>
+  
+  <pre id="resultElement">Results will appear here...</pre>
+
+  <script src="churnaizer-sdk.js"></script>
+  <script>
+    // Enable debug mode to see detailed logs
+    window.Churnaizer.debug = true;
+    
+    // Create a wrapper for tracking to help with debugging
+    function trackUserWithChurnaizer(userData, apiKey, resultElement) {
+      console.log('Tracking user with Churnaizer:', userData);
+      
+      window.Churnaizer.track(userData, apiKey, function(error, result) {
+        if (error) {
+          console.error('Churnaizer tracking failed:', error);
+          if (resultElement) {
+            resultElement.innerHTML = `<p style="color: red;">❌ Error: ${error.message || 'Unknown error'}</p>`;
+          }
+          return;
+        }
+        
+        console.log('Churnaizer tracking succeeded:', result);
+        if (resultElement) {
+          resultElement.innerHTML = `
+            <p style="color: green;">✅ Tracking Successful</p>
+            <p>Churn Score: ${result.churn_score}</p>
+            <p>Reason: ${result.churn_reason}</p>
+            <p>Insight: ${result.insight}</p>
+            <p>Understanding: ${result.understanding}</p>
+          `;
+        }
+      });
+    }
+    
+    // Test function that will be called when the button is clicked
+    function testTracking() {
+      const resultElement = document.getElementById('resultElement');
+      resultElement.innerHTML = '<p>Processing...</p>';
+      
+      const testUser = {
+        user_id: "test_user_001",
+        email: "test@example.com",
+        customer_name: "Test User",
+        days_since_signup: 45,
+        monthly_revenue: 29.99,
+        subscription_plan: "Pro",
+        number_of_logins_last30days: 15,
+        active_features_used: ["dashboard", "reports", "settings"],
+        support_tickets_opened: 1,
+        last_payment_status: "Paid",
+        email_opens_last30days: 8,
+        last_login_days_ago: 2,
+        billing_issue_count: 0
+      };
+      
+      // Use a test API key - replace with your actual test key
+      const apiKey = "cg_4a7ae37e08f0ac064f93b244487e19b8";
+      
+      trackUserWithChurnaizer(testUser, apiKey, resultElement);
+    }
+    
+    // Add click event listener to the test button
+    document.getElementById('testButton').addEventListener('click', testTracking);
+  </script>
+</body>
+</html>
