@@ -21,7 +21,7 @@ window.Churnaizer = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-API-Key": apiKey,
+
           "x-sdk-version": window.Churnaizer.version,
           "x-trace-id": traceId
         },
@@ -79,7 +79,7 @@ window.Churnaizer = {
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
-            "X-API-Key": apiKey,
+
             "x-trace-id": traceId
           },
           body: JSON.stringify({ userData, prediction: result, trace_id: traceId, api_key: apiKey })
@@ -96,7 +96,7 @@ window.Churnaizer = {
             method: 'POST',
             headers: {
               "Content-Type": "application/json",
-              "X-API-Key": apiKey,
+
             "x-trace-id": traceId
           },
           body: JSON.stringify({
@@ -158,7 +158,7 @@ window.Churnaizer = {
               headers: {
                   'Content-Type': 'application/json',
                   'x-sdk-version': window.Churnaizer.version,
-                  'X-API-Key': apiKey,
+
                   'x-trace-id': traceId
               },
               body: JSON.stringify({ ...eventData, trace_id: traceId, api_key: apiKey })
