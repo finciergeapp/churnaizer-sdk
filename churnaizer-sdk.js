@@ -13,7 +13,8 @@ window.Churnaizer = {
     if (this.debug) console.log(`[TRACE 1 | trace_id: ${traceId}] SDK Payload:`, userData);
 
     try {
-      const DEFAULT_ENDPOINT = 'https://ntbkydpgjaswmwruegyl.supabase.co/functions/v1/sdk-track';
+      const SUPABASE_PROJECT_URL = window.Churnaizer.SUPABASE_PROJECT_URL || "ntbkydpgjaswmwruegyl.supabase.co";
+      const DEFAULT_ENDPOINT = `https://${SUPABASE_PROJECT_URL}/functions/v1/sdk-track`;
 
       // 🔁 Send to prediction API
       const predictRes = await fetch(DEFAULT_ENDPOINT, {
