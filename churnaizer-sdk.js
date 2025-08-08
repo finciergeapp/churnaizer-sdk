@@ -105,8 +105,8 @@ window.Churnaizer = {
         shouldTriggerEmail,
         recommended_tone
       };
-
-      // Sync to Dashboard
+ 
+        // Sync to Dashboard
       try {
         await fetch('https://churnaizer.com/api/sync', {
           method: 'POST',
@@ -216,4 +216,11 @@ window.Churnaizer = {
           }
       }
   }
+};
+
+// ✅ Lightweight global verification object
+window.__CHURNAIZER_SDK_STATUS__ = {
+  installed: true,
+  apiKey: window.__CHURNAIZER_API_KEY__ || 'not-set',
+  domain: window.location.hostname
 };
