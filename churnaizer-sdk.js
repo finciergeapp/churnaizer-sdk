@@ -224,3 +224,43 @@ window.__CHURNAIZER_SDK_STATUS__ = {
   apiKey: window.__CHURNAIZER_API_KEY__ || 'not-set',
   domain: window.location.hostname
 };
+
+// 🔄 Automatic SDK Integration Check
+(function () {
+  function runIntegrationCheck() {
+    if (!window.__CHURNAIZER_API_KEY__) {
+      if (window.Churnaizer?.debug) console.warn('Churnaizer SDK: API key not set, skipping integration check');
+      return;
+    }
+
+    const SUPABASE_PROJECT_URL = window.Churnaizer.SUPABASE_PROJECT_URL || "ntbkydpgjaswmwruegyl.supabase.co";
+    const endpoint = `https://${SUPABASE_PROJECT_URL}/functions/v1/sdk-test`;
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': window.__CHURNAIZER_API_KEY__,
+        'x-sdk-version': window.Churnaizer.version
+      },
+      body: JSON.stringify({
+        test: true,
+        website: window.location.hostname,
+        user_id: window.__CHURNAIZER_USER_ID__ || 'unknown'
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'ok') {
+          console.log(`✅ Churnaizer SDK integration confirmed for ${window.location.hostname}`);
+        } else {
+          console.warn('⚠️ Churnaizer SDK integration check failed:', data);
+        }
+      })
+      .catch(err => {
+        console.error('❌ SDK integration check error:', err);
+      });
+  }
+
+  window.addEventListener('load', runIntegrationCheck);
+})();
