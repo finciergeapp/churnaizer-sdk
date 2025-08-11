@@ -227,14 +227,25 @@ window.__CHURNAIZER_SDK_STATUS__ = {
 
 // 🔄 Automatic SDK Integration Check
 (function () {
-  function runIntegrationCheck() {
+  function runIntegrationCheck(retryCount = 0) {
+    const MAX_RETRIES = 5;
+    const RETRY_DELAY_MS = 100;
+
     if (!window.__CHURNAIZER_API_KEY__) {
-      if (window.Churnaizer?.debug) console.warn('Churnaizer SDK: API key not set, skipping integration check');
-      return;
+      if (retryCount < MAX_RETRIES) {
+        if (window.Churnaizer?.debug) console.warn(`Churnaizer SDK: API key not set, retrying integration check in ${RETRY_DELAY_MS}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+        setTimeout(() => runIntegrationCheck(retryCount + 1), RETRY_DELAY_MS);
+        return;
+      } else {
+        if (window.Churnaizer?.debug) console.error('Churnaizer SDK: API key not set after multiple retries, skipping integration check.');
+        return;
+      }
     }
 
     const SUPABASE_PROJECT_URL = window.Churnaizer.SUPABASE_PROJECT_URL || "ntbkydpgjaswmwruegyl.supabase.co";
     const endpoint = `https://${SUPABASE_PROJECT_URL}/functions/v1/sdk-test`;
+
+    if (window.Churnaizer?.debug) console.log('Churnaizer SDK: Sending integration check with API Key:', window.__CHURNAIZER_API_KEY__ ? 'Set' : 'Not Set', 'Value:', window.__CHURNAIZER_API_KEY__);
 
     fetch(endpoint, {
       method: 'POST',
