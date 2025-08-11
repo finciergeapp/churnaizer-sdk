@@ -251,6 +251,7 @@ window.__CHURNAIZER_SDK_STATUS__ = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': window.__CHURNAIZER_API_KEY__,
         'Authorization': `Bearer ${window.__CHURNAIZER_API_KEY__}`,
         'x-sdk-version': window.Churnaizer.version
       },
